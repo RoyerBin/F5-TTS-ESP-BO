@@ -418,6 +418,7 @@ def start_training(
 
     # Command to run the training script with the specified arguments
 
+    # Este es el bloque original
     if tokenizer_file == "":
         if dataset_name.endswith("_pinyin"):
             tokenizer_type = "pinyin"
@@ -426,12 +427,19 @@ def start_training(
     else:
         tokenizer_type = "custom"
 
+    # Limpias sufijos _pinyin y _char para quedarte con el nombre base
     dataset_name = dataset_name.replace("_pinyin", "").replace("_char", "")
 
+    # Aquí añades esta parte para evitar duplicar _custom
+    if tokenizer_type == "custom" and not dataset_name.endswith("_custom"):
+        dataset_name += "_custom"
+
+    # Resto de tu código
     if mixed_precision != "none":
         fp16 = f"--mixed_precision={mixed_precision}"
     else:
         fp16 = ""
+
 
     cmd = (
         f'accelerate launch {fp16} "{file_train}" --exp_name {exp_name}'
