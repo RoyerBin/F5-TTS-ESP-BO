@@ -430,10 +430,6 @@ def start_training(
     # Limpias sufijos _pinyin y _char para quedarte con el nombre base
     dataset_name = dataset_name.replace("_pinyin", "").replace("_char", "")
 
-    # Aquí añades esta parte para evitar duplicar _custom
-    if tokenizer_type == "custom" and not dataset_name.endswith("_custom"):
-        dataset_name += "_custom"
-
     # Resto de tu código
     if mixed_precision != "none":
         fp16 = f"--mixed_precision={mixed_precision}"
