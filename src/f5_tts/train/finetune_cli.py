@@ -152,18 +152,21 @@ def main():
 
     # Use the tokenizer and tokenizer_path provided in the command line arguments
 
-    tokenizer = args.tokenizer
-    if tokenizer == "custom":
-        if not args.tokenizer_path:
-            raise ValueError("Custom tokenizer selected, but no tokenizer_path provided.")
-        tokenizer_path = args.tokenizer_path
-    else:
-        tokenizer_path = args.dataset_name
+          tokenizer = args.tokenizer
+          if tokenizer == "custom":
+              if not args.tokenizer_path:
+                  raise ValueError("Custom tokenizer selected, but no tokenizer_path provided.")
+              tokenizer_path = args.tokenizer_path
+              if tokenizer_path.endswith("_custom"):
+                  tokenizer_path = tokenizer_path.replace("_custom", "")
+          else:
+              tokenizer_path = args.dataset_name
+          
+          vocab_char_map, vocab_size = get_tokenizer(tokenizer_path, tokenizer)
+          
+          print("\nvocab : ", vocab_size)
+          print("\nvocoder : ", mel_spec_type)
 
-    vocab_char_map, vocab_size = get_tokenizer(tokenizer_path, tokenizer)
-
-    print("\nvocab : ", vocab_size)
-    print("\nvocoder : ", mel_spec_type)
 
     mel_spec_kwargs = dict(
         n_fft=n_fft,
